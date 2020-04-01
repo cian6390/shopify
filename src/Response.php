@@ -2,8 +2,6 @@
 
 namespace Cian\Shopify;
 
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-
 class Response
 {
     /**
@@ -31,7 +29,7 @@ class Response
         'previous' => '/<(.*)>; rel="previous"/'
     ];
 
-    public function __construct(GuzzleResponse $response)
+    public function __construct($response)
     {
         $this->setOriginalResponse($response)
             ->handleHeaders()
@@ -72,7 +70,7 @@ class Response
         return $this;
     }
 
-    public function setOriginalResponse(GuzzleResponse $response)
+    public function setOriginalResponse($response)
     {
         $this->response = $response;
 

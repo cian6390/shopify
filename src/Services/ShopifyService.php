@@ -55,7 +55,7 @@ abstract class ShopifyService
     public function setWebsite($website)
     {
         if (!isset($this->config['websites'][$website])) {
-            throw new UnknownWebsiteException;
+            throw new UnknownWebsiteException($website);
         }
 
         $this->website = $website;

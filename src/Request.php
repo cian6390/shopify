@@ -2,7 +2,10 @@
 
 namespace Cian\Shopify;
 
-use GuzzleHttp\Exception\BadResponseException;
+use Exception;
+use Cian\Shopify\Exceptions\LimitCallException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class Request
 {
@@ -21,24 +24,40 @@ class Request
      * @param string $string
      * @param array $options
      * @param int $tries
-     * 
+     *
      * @return \GuzzleHttp\Psr7\Response
      */
-    public function call($method, $url, $options, $tries = 1)
+    public function call($method, $url, $options = [], $tries = 1)
     {
-        for ($i = 0; $i < $tries; $i++) {
-            try {
-                return $this->http->request($method, $url, $options);
-            } catch (BadResponseException $e) {
-                $status = $e->response->statusCode;
+        for ($i = 1; $i <= $tries; $i++) {
+            $shouldRetry = $tries - $i > 0;
+            return $this->send($method, $url, $options, $shouldRetry);
+        }
+    }
 
-                if ($status === 429) {
-                    sleep(250);
-                    continue;
+    protected function send($method, $url, $options, $shouldRetry) {
+        try {
+            return $this->http->request($method, $url, $options);
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode === 429) {
+                if ($shouldRetry) {
+                    sleep(1);
+                } else {
+                    throw new LimitCallException;
                 }
-            } catch (\Exception $e) {
+            } else {
                 throw $e;
             }
+        } catch (ServerException $e) {
+            if (!$shouldRetry) {
+                throw new LimitCallException;
+            }
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 }
