@@ -1,6 +1,6 @@
 <?php
 
-namespace Cian\Shopify\Services;
+namespace Cian\Shopify;
 
 use Cian\Shopify\Request;
 use Cian\Shopify\Response;
@@ -111,7 +111,7 @@ abstract class ShopifyService
         return "https://{$this->getStoreURL()}/admin/api/{$this->version}/{$source}";
     }
 
-    public function request($method, $source, $options)
+    public function request($method, $source, $options = [])
     {
         if (is_null($this->website)) {
             throw new UnsetWebsiteException;

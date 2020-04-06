@@ -2,48 +2,58 @@
 
 namespace Cian\Shopify;
 
-use Cian\Shopify\Services\OrderService;
+use Cian\Shopify\ShopifyService;
 
-class Shopify
+class Shopify extends ShopifyService
 {
-    /**
-     * @var \GuzzleHttp\Client $http
-     */
-    protected $http;
-
-    /**
-     * @var array $config
-     */
-    protected $config;
-
-    /**
-     * @var \Cian\Shopify\Services\OrderService $order
-     */
-    protected $orderService;
-
-    public function __construct($http, array $config)
+    public function getOrder($orderId, array $options = [])
     {
-        $this->http = $http;
-
-        $this->config = $config;
-
-        $this->orderService = $this->makeService(OrderService::class);
+        return $this->request('GET', "orders/{$orderId}.json", $options);
     }
 
-    public function getOrderService()
+    public function listOrders(array $options = [])
     {
-        return $this->orderService;
+        return $this->request('GET', 'orders.json', $options);
     }
 
-    public function makeService($class)
+    public function countOrder(array $options = [])
     {
-        if (function_exists('app')) {
-            return app($class, [
-                'http' => $this->http,
-                'config' => $this->config
-            ]);
-        }
+        return $this->request('GET', 'orders/count.json', $options);
+    }
 
-        return new $class($this->http, $this->config);
+    /**
+     * Closes an order
+     */
+    public function closeOrder($orderId, array $options = [])
+    {
+        return $this->request('POST', "orders/{$orderId}/close.json", $options);
+    }
+
+    /**
+     * Re-opens a closed order
+     */
+    public function openOrder($orderId, array $options = [])
+    {
+        return $this->request('POST', "orders/{$orderId}/open.json", $options);
+    }
+
+    public function cancelOrder($orderId, array $options = [])
+    {
+        return $this->request('POST', "orders/{$orderId}/cancel.json", $options);
+    }
+
+    public function createOrder(array $options)
+    {
+        return $this->request('POST', "orders.json", $options);
+    }
+
+    public function updateOrder($orderId, array $options)
+    {
+        return $this->request('PUT', "orders/{$orderId}.json", $options);
+    }
+
+    public function deleteOrder($orderId)
+    {
+        return $this->request('DELETE', "orders/{$orderId}.json");
     }
 }

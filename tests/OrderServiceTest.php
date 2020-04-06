@@ -33,7 +33,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->getOrderService()->setWebsite('tw')->get($orderId);
+        $response = $shopify->setWebsite('tw')->getOrder($orderId);
 
         $this->assertEquals($response->getBody(), $fakeOrder);
     }
@@ -76,7 +76,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->getOrderService()->setWebsite('tw')->list($expectArguments);
+        $response = $shopify->setWebsite('tw')->listOrders($expectArguments);
 
         $this->assertCount(1, $response->getBody()['orders']);
     }
@@ -104,7 +104,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->getOrderService()->setWebsite('tw')->count();
+        $response = $shopify->setWebsite('tw')->countOrder();
 
         $this->assertEquals($response->getBody(), $fakeResponseBody);
 
@@ -135,7 +135,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->getOrderService()->setWebsite('tw')->close($orderId);
+        $response = $shopify->setWebsite('tw')->closeOrder($orderId);
 
         $this->assertEquals($response->getBody(), $fakeOrder);
     }
@@ -169,7 +169,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->getOrderService()->setWebsite('tw')->open($orderId);
+        $response = $shopify->setWebsite('tw')->openOrder($orderId);
 
         $this->assertEquals($response->getBody(), $fakeRespons);
     }
@@ -203,9 +203,120 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->getOrderService()->setWebsite('tw')->cancel($orderId);
+        $response = $shopify->setWebsite('tw')->cancelOrder($orderId);
 
         $this->assertEquals($response->getBody(), $fakeRespons);
+    }
+
+    public function test_create_api()
+    {
+        $website = 'tw';
+        $config = $this->getConfig($website);
+        $orderId = '3345678';
+        $lineitems = [
+            [
+                'variant_id' => 447654529,
+                'quantity' => 1
+            ]
+        ];
+        $data = [
+            'order' => [
+                'line_items' => $lineitems
+            ]
+        ];
+
+        $expectMethod = 'POST';
+        $expectURL = "https://{$config['url']}/admin/api/2020-01/orders.json";
+
+        $expectOptions = [
+            'auth' => [$config['credential']['key'], $config['credential']['password']],
+            'json' => $data
+        ];
+
+        $fakeRespons = [
+            'order' => [
+                'id' => $orderId,
+                'line_items' => $lineitems
+            ]
+        ];
+        $mock = $this->getMockClient();
+
+        $mock->shouldReceive('request')
+            ->once()
+            ->with($expectMethod, $expectURL, $expectOptions)
+            ->andReturn(new Response(200, [], json_encode($fakeRespons)));
+
+        $shopify = $this->getShopify($mock);
+
+        $response = $shopify->setWebsite('tw')->createOrder($data);
+
+        $this->assertEquals($response->getBody(), $fakeRespons);
+    }
+
+    public function test_update_api()
+    {
+        $website = 'tw';
+        $config = $this->getConfig($website);
+        $orderId = '3345678';
+
+        $expectMethod = 'PUT';
+        $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}.json";
+        $data = [
+            'order' => [
+                'id' => $orderId,
+                'note' => 'test'
+            ]
+        ];
+
+        $expectOptions = [
+            'auth' => [$config['credential']['key'], $config['credential']['password']],
+            'json' => $data
+        ];
+
+        $fakeRespons = [
+            'order' => [
+                'id' => $orderId,
+                'note' => 'test'
+            ]
+        ];
+        $mock = $this->getMockClient();
+
+        $mock->shouldReceive('request')
+            ->once()
+            ->with($expectMethod, $expectURL, $expectOptions)
+            ->andReturn(new Response(200, [], json_encode($fakeRespons)));
+
+        $shopify = $this->getShopify($mock);
+
+        $response = $shopify->setWebsite('tw')->updateOrder($orderId, $data);
+
+        $this->assertEquals($response->getBody(), $fakeRespons);
+    }
+
+    public function test_delete_api()
+    {
+        $website = 'tw';
+        $config = $this->getConfig($website);
+        $orderId = '3345678';
+
+        $expectMethod = 'DELETE';
+        $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}.json";
+
+        $expectOptions = [
+            'auth' => [$config['credential']['key'], $config['credential']['password']],
+            'json' => []
+        ];
+
+        $mock = $this->getMockClient();
+
+        $mock->shouldReceive('request')
+            ->once()
+            ->with($expectMethod, $expectURL, $expectOptions)
+            ->andReturn(new Response(200, []));
+
+        $shopify = $this->getShopify($mock);
+
+        $shopify->setWebsite('tw')->deleteOrder($orderId);
     }
 
     protected function getShopify($mockClient)
