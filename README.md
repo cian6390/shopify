@@ -91,17 +91,26 @@ use Shopify;
 $response = Shopify::getOrders();
 
 $response->hasNextPage(); // boolean
-$response->getNextLink(); // null|string, string is url witch is next page api link.
+$response->getNextLink(); // null or next page api url string.
+$nextPageResponse = $response->callNextPage();  // null or \Cian\Shopify\Response object
 
-$response->hasPreviousPage();   // boolean
-$response->getPreviousLink();   // null|string, string is url witch is previous page api link.
+$response->hasPreviousPage(); // boolean
+$response->getPreviousLink(); // null or previous page api url string.
+$previousPageResponse = $response->callNextPage();  // null or \Cian\Shopify\Response object
 
 $response->isLastPage(); // boolean
 
 /**
  * This method get content from guzzle response.
  * and run json_decode brefore return.
- * you can pass json_decode options via this method;
+ * you can pass json_decode options via this method,
+ * here just show you the default values, all options are optional!
  */
-$response->getBody();
+$response->getBody(true, 512, 0);
+
+/**
+ * If you prefer handle response by your self.
+ * you can get original response like below.
+ */
+$guzzleResponse = $response->getOriginalResponse();
 ```
