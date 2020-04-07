@@ -31,9 +31,9 @@ class Response
 
     public function __construct($response)
     {
-        $this->setOriginalResponse($response)
-            ->handleHeaders()
-            ->handleBody();
+        $this->response = $response;
+        
+        $this->handleHeaders();
     }
 
     protected function handleHeaders()
@@ -61,22 +61,6 @@ class Response
         return $this;
     }
 
-    protected function handleBody()
-    {
-        $contents = $this->response->getBody()->getContents();
-
-        $this->body = json_decode($contents, 2);
-
-        return $this;
-    }
-
-    public function setOriginalResponse($response)
-    {
-        $this->response = $response;
-
-        return $this;
-    }
-
     /**
      * @return \GuzzleHttp\Psr7\Response
      */
@@ -88,9 +72,11 @@ class Response
     /**
      * @return array|null
      */
-    public function getBody()
+    public function getBody($assoc = true, $depth = 512, $options = 0)
     {
-        return $this->body;
+        $contents = (clone $this->response)->getBody()->getContents();
+
+        return json_decode($contents, $assoc, $depth, $options);
     }
 
     /**

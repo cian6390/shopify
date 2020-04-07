@@ -9,6 +9,9 @@
         {
             "name": "Cian.h",
             "email": "cian.h@evolutivelabs.com"
+        }, {
+            "name": "Erin.l",
+            "email": "erin.l@evolutivelabs.com"
         }
     ],
     "autoload": {
@@ -30,5 +33,15 @@
         "phpunit/phpunit": "^8.5",
         "mockery/mockery": "^1",
         "symfony/var-dumper": "^5.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cian\\Shopify\\ShopifyServiceProvider"
+            ],
+            "aliases": {
+                "Shopify": "Cian\\Shopify\\ShopifyFacade"
+            }
+        }
     }
 }
