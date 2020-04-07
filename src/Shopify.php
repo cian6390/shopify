@@ -7,6 +7,8 @@ use Cian\Shopify\ShopifyService;
 class Shopify extends ShopifyService
 {
     /**
+     * Retrieves a specific order.
+     * 
      * @return \Cian\Shopify\Response
      */
     public function getOrder($orderId, array $options = [])
@@ -15,6 +17,8 @@ class Shopify extends ShopifyService
     }
 
     /**
+     * Retrieves a list of orders.
+     * 
      * @return \Cian\Shopify\Response
      */
     public function listOrders(array $options = [])
@@ -23,6 +27,8 @@ class Shopify extends ShopifyService
     }
 
     /**
+     * Retrieves an order count.
+     * 
      * @return \Cian\Shopify\Response
      */
     public function countOrder(array $options = [])
@@ -32,46 +38,50 @@ class Shopify extends ShopifyService
 
     /**
      * Closes an order
-     * 
+     *
      * @return \Cian\Shopify\Response
      */
-    public function closeOrder($orderId, array $options = [])
+    public function closeOrder($orderId)
     {
-        return $this->request('POST', "orders/{$orderId}/close.json", $options);
+        return $this->request('POST', "orders/{$orderId}/close.json");
     }
 
     /**
      * Re-opens a closed order
+     *
+     * @return \Cian\Shopify\Response
+     */
+    public function openOrder($orderId)
+    {
+        return $this->request('POST', "orders/{$orderId}/open.json");
+    }
+
+    /**
+     * Cancels an order. Orders that have a fulfillment object can't be canceled.
      * 
      * @return \Cian\Shopify\Response
      */
-    public function openOrder($orderId, array $options = [])
+    public function cancelOrder($orderId)
     {
-        return $this->request('POST', "orders/{$orderId}/open.json", $options);
+        return $this->request('POST', "orders/{$orderId}/cancel.json");
+    }
+
+    /**
+     * Creates an order.
+     * 
+     * @return \Cian\Shopify\Response
+     */
+    public function createOrder(array $order)
+    {
+        return $this->request('POST', 'orders.json', ['order' => $order]);
     }
 
     /**
      * @return \Cian\Shopify\Response
      */
-    public function cancelOrder($orderId, array $options = [])
+    public function updateOrder($orderId, array $order = [])
     {
-        return $this->request('POST', "orders/{$orderId}/cancel.json", $options);
-    }
-
-    /**
-     * @return \Cian\Shopify\Response
-     */
-    public function createOrder(array $options)
-    {
-        return $this->request('POST', "orders.json", $options);
-    }
-
-    /**
-     * @return \Cian\Shopify\Response
-     */
-    public function updateOrder($orderId, array $options = [])
-    {
-        return $this->request('PUT', "orders/{$orderId}.json", $options);
+        return $this->request('PUT', "orders/{$orderId}.json", ['order' => $order]);
     }
 
     /**
@@ -84,7 +94,7 @@ class Shopify extends ShopifyService
 
     /**
      * Retrieves a list of products.
-     * 
+     *
      * @return \Cian\Shopify\Response
      */
     public function getProducts($options = [])
@@ -94,7 +104,7 @@ class Shopify extends ShopifyService
 
     /**
      * Retrieves a single product.
-     * 
+     *
      * @return \Cian\Shopify\Response
      */
     public function getProduct($productId, $options = [])
@@ -104,17 +114,17 @@ class Shopify extends ShopifyService
 
     /**
      * Creates a new product.
-     * 
+     *
      * @return \Cian\Shopify\Response
      */
     public function createProduct(array $product)
     {
-        return $this->request('POST', "products.json", ['product' => $product]);
+        return $this->request('POST', 'products.json', ['product' => $product]);
     }
 
     /**
      * Retrieves a single product variant by ID.
-     * 
+     *
      * @return \Cian\Shopify\Response
      */
     public function getProductVariant($variantId, $options = [])
@@ -124,11 +134,51 @@ class Shopify extends ShopifyService
 
     /**
      * Updates an existing product variant.
-     * 
+     *
      * @return \Cian\Shopify\Response
      */
     public function updateProductVariant($variantId, $variant = [])
     {
         return $this->request('PUT', "variants/$variantId.json", ['variant' => $variant]);
+    }
+
+    /**
+     * Retrieves fulfillments associated with an order.
+     *
+     * @return \Cian\Shopify\Response
+     */
+    public function getOrderFulfillments($orderId, array $options = [])
+    {
+        return $this->request('GET', "orders/$orderId/fulfillments.json", $options);
+    }
+
+    /**
+     * Create a fulfillment for the specified order and line items.
+     *
+     * @return \Cian\Shopify\Response
+     */
+    public function createOrderFulfillment($orderId, array $fulfillment)
+    {
+        return $this->request('POST', "orders/$orderId/fulfillments.json", ['fulfillment' => $fulfillment]);
+    }
+
+    /**
+     * Update information associated with a fulfillment.
+     *
+     * @return \Cian\Shopify\Response
+     */
+    public function updateOrderFulfillment($orderId, $fulfillmentId, array $fulfillment)
+    {
+        return $this->request('PUT', "orders/$orderId/fulfillments/$fulfillmentId.json", ['fulfillment' => $fulfillment]);
+    }
+
+    /**
+     * Cancel a fulfillment for a specific order ID.
+     *
+     * @return \Cian\Shopify\Response
+     */
+    public function cancelOrderFullment($orderId, $fulfillmentId)
+    {
+        return $this->request('POST', "orders/$orderId/fulfillments/$fulfillmentId/cancel.json");
     }
 }

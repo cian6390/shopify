@@ -219,10 +219,8 @@ class OrderServiceTest extends TestCase
                 'quantity' => 1
             ]
         ];
-        $data = [
-            'order' => [
-                'line_items' => $lineitems
-            ]
+        $order =  [
+            'line_items' => $lineitems
         ];
 
         $expectMethod = 'POST';
@@ -230,7 +228,7 @@ class OrderServiceTest extends TestCase
 
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => $data
+            'json' => ['order' => $order]
         ];
 
         $fakeRespons = [
@@ -248,7 +246,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->createOrder($data);
+        $response = $shopify->setWebsite('tw')->createOrder($order);
 
         $this->assertEquals($response->getBody(), $fakeRespons);
     }
@@ -270,7 +268,7 @@ class OrderServiceTest extends TestCase
 
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => $data
+            'json' => ['order' => $data]
         ];
 
         $fakeRespons = [
@@ -317,35 +315,5 @@ class OrderServiceTest extends TestCase
         $shopify = $this->getShopify($mock);
 
         $shopify->setWebsite('tw')->deleteOrder($orderId);
-    }
-
-    protected function getShopify($mockClient)
-    {
-        return new Shopify($mockClient, $this->getConfig());
-    }
-
-    protected function getConfig($website = null)
-    {
-        $config = [
-            'defaults' => [
-                'api_version' => '2020-01',
-                'api_retries' => 3
-            ],
-            'websites' => [
-                'tw' => [
-                    'url' => 'store.myshopify.com',
-                    'credential' => [
-                        'key' => 'key001',
-                        'password' => 'zxcvbn'
-                    ]
-                ]
-            ]
-        ];
-
-        if ($website) {
-            return $config['websites'][$website];
-        }
-
-        return $config;
     }
 }
