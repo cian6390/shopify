@@ -6,6 +6,7 @@ use Mockery;
 use GuzzleHttp\Client;
 use Cian\Shopify\Shopify;
 use Illuminate\Support\Str;
+use Cian\Shopify\ShopifyMacro;
 use Mockery\Exception\InvalidCountException;
 
 class TestCase extends \PHPUnit\Framework\TestCase
@@ -29,9 +30,16 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function getShopify($client, $config = [])
     {
-        $config = array_merge($config, $this->getConfig());
+        $config = array_merge($this->getConfig(), $config);
 
         return new Shopify($client, $config);
+    }
+
+    protected function getShopifyMacro($client, $config = [])
+    {
+        $shopify = $this->getShopify($client, $config);
+
+        return new ShopifyMacro($shopify);
     }
 
     protected function getConfig($website = null)

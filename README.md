@@ -92,11 +92,9 @@ $response = Shopify::getOrders();
 
 $response->hasNextPage(); // boolean
 $response->getNextLink(); // null or next page api url string.
-$nextPageResponse = $response->callNextPage();  // null or \Cian\Shopify\Response object
 
 $response->hasPreviousPage(); // boolean
 $response->getPreviousLink(); // null or previous page api url string.
-$previousPageResponse = $response->callNextPage();  // null or \Cian\Shopify\Response object
 
 $response->isLastPage(); // boolean
 
@@ -121,6 +119,8 @@ That say you want get data easily and you don't care performance.
 For example, you want get all result of a specific customers search, You don't want handle pagination.  
 Then you can use this class. 🍻🍻🍻  
 
+> Note: You may get memory issue when getting too large data.
+
 ### searchCustomers
 ```php
 
@@ -140,13 +140,15 @@ class MyService
     public function exec()
     {
         $options = [
-            // search options ...
+            'limit' => 250, // get 250 records per request.
+            'created_at_min' => '2020-04-08' // set min date
+            // other getOrders options ..
         ];
 
-        // You will just get result instead of \Cian\Shopify\Response instance.
-        $customers = $this->shopifyMacro->searchCustomers($options)
+        // You will get response body instead of \Cian\Shopify\Response instance.
+        $orders = $this->shopifyMacro->getOrders($options)
 
-        // do something with customers ...
+        // do something with orders ...
     }
 }
 ```

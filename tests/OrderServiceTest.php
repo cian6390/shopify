@@ -75,7 +75,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->listOrders($expectArguments);
+        $response = $shopify->setWebsite('tw')->getOrders($expectArguments);
 
         $this->assertCount(1, $response->getBody()['orders']);
     }

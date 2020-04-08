@@ -4,6 +4,7 @@ namespace Cian\Shopify;
 
 use Cian\Shopify\Request;
 use Cian\Shopify\Response;
+use Illuminate\Support\Str;
 use Cian\Shopify\Exceptions\UnsetWebsiteException;
 use Cian\Shopify\Exceptions\UnknownWebsiteException;
 
@@ -45,15 +46,34 @@ abstract class ShopifyService
         $this->setRetries($config['defaults']['api_retries']);
     }
 
-    public function setRetries($retries)
+    /**
+     * Set shopify api version.
+     *
+     * @param string $version
+     * @return $this
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Set default retry times of request.
+     *
+     * @param int $retries
+     * @return $this
+     */
+    public function setRetries(int $retries)
     {
         $this->retries = $retries;
 
         return $this->retries;
     }
-    
+
     /**
-     * Set active website.
+     * Set target website.
      *
      * @param $website
      * @return $this
@@ -78,13 +98,6 @@ abstract class ShopifyService
         $this->website;
     }
 
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
     /**
      * @return string
      */
@@ -104,7 +117,9 @@ abstract class ShopifyService
 
     public function getCredential()
     {
-        return $this->getConfig()['websites'][$this->website]['credential'];
+        $credential = $this->getConfig()['websites'][$this->website]['credential'];
+
+        return [$credential['key'], $credential['password']];
     }
 
     public function getStoreURL()
@@ -124,11 +139,7 @@ abstract class ShopifyService
     {
         $options = [];
 
-        $credential = $this->getCredential();
-        $key = $credential['key'];
-        $password = $credential['password'];
-
-        $options['auth'] = [$key, $password];
+        $options['auth'] = $this->getCredential();
 
         return $options;
     }
@@ -151,7 +162,11 @@ abstract class ShopifyService
 
         $request = new Request($this->http);
 
-        $response = $request->call($method, $this->makeURL($source), $options, $this->retries);
+        $url = Str::startsWith($source, 'http')
+            ? $source
+            : $this->makeURL($source);
+
+        $response = $request->call($method, $url, $options, $this->retries);
 
         return new Response($response);
     }

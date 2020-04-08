@@ -21,7 +21,7 @@ class Shopify extends ShopifyService
      *
      * @return Response
      */
-    public function listOrders(array $options = [])
+    public function getOrders(array $options = [])
     {
         return $this->request('GET', 'orders.json', $options);
     }
@@ -214,7 +214,7 @@ class Shopify extends ShopifyService
      * @return Response
      * @throws Exceptions\UnsetWebsiteException
      */
-    public function listDraftOrder(array $options = [])
+    public function getDraftOrders(array $options = [])
     {
         return $this->request('GET', 'draft_orders.json', $options);
     }

@@ -74,7 +74,7 @@ class DraftOrderTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->listDraftOrder($expectArguments);
+        $response = $shopify->setWebsite('tw')->getDraftOrders($expectArguments);
 
         $this->assertCount(1, $response->getBody()['draft_orders']);
     }
