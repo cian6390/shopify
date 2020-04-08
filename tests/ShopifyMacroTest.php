@@ -25,7 +25,7 @@ class ShopifyMacroTest extends TestCase
         //     ->setWebsite('tw')
         //     ->getOrders([
         //         'limit' => 250,
-        //         'created_at_min' => \Carbon\Carbon::parse('2020-04-08 12:00:00', 'Asia/Taipei')->format('Y-m-d\TH:i:sP')
+        //         'created_at_min' => '2020-04-08T12:00:00+08:00'
         //     ]);
         
         // dd(count($orders));

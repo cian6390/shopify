@@ -43,8 +43,7 @@ class CustomerServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/customers/{$expectId}.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $mock = $this->getMockClient();

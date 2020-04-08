@@ -71,9 +71,10 @@ class ShopifyMacro
 
         $link = $response->getNextLink();
 
-        while ($link = $response->getNextLink()) {
-
+        while ($link) {
             $response = $this->shopify->request('GET', $link);
+
+            $link = $response->getNextLink();
 
             $results = array_merge($results, $response->getBody()[$key]);
         }

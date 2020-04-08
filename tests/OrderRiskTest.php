@@ -18,8 +18,7 @@ class OrderRiskTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/risks.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $expectResponseBoday = [

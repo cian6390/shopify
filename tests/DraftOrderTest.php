@@ -16,8 +16,7 @@ class DraftOrderTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/draft_orders/{$draftOrderId}.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeOrder = ['id' => $draftOrderId];
@@ -87,8 +86,7 @@ class DraftOrderTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/draft_orders/count.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeResponseBody = ['count' => 1];
@@ -117,8 +115,7 @@ class DraftOrderTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/close.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeOrder = ['id' => $orderId];
@@ -232,8 +229,7 @@ class DraftOrderTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/draft_orders/{$draftOrderId}.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $mock = $this->getMockClient();
@@ -258,8 +254,7 @@ class DraftOrderTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/draft_orders/{$draftOrderId}/complete.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $mock = $this->getMockClient();

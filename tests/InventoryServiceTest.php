@@ -41,8 +41,7 @@ class InventoryServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/locations.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $mock = $this->getMockClient();

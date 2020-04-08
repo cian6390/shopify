@@ -17,8 +17,7 @@ class OrderServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeOrder = ['id' => $orderId];
@@ -88,8 +87,7 @@ class OrderServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/count.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeResponseBody = ['count' => 1];
@@ -118,8 +116,7 @@ class OrderServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/close.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeOrder = ['id' => $orderId];
@@ -148,8 +145,7 @@ class OrderServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/open.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeRespons = [
@@ -182,8 +178,7 @@ class OrderServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/cancel.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $fakeRespons = [
@@ -299,8 +294,7 @@ class OrderServiceTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $mock = $this->getMockClient();

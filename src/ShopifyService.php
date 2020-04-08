@@ -154,10 +154,12 @@ abstract class ShopifyService
 
         $method = strtoupper($method);
 
-        if ($method === 'GET') {
-            $options['query'] = $data;
-        } else {
-            $options['json'] = $data;
+        if (count($data)) {
+            if ($method === 'GET') {
+                $options['query'] = $data;
+            } else {
+                $options['json'] = $data;
+            }
         }
 
         $request = new Request($this->http);

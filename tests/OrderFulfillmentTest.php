@@ -17,8 +17,7 @@ class OrderFulfillmentTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/fulfillments.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'query' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $mock = $this->getMockClient();
@@ -104,8 +103,7 @@ class OrderFulfillmentTest extends TestCase
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/1/fulfillments/2/cancel.json";
 
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => []
+            'auth' => [$config['credential']['key'], $config['credential']['password']]
         ];
 
         $mock = $this->getMockClient();
