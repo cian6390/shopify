@@ -51,13 +51,13 @@ abstract class ShopifyService
 
         return $this->retries;
     }
-
+    
     /**
      * Set active website.
      *
-     * @param string $website
-     * @return ShopifyService
-     * @throws Exceptions\UnknownWebsiteException
+     * @param $website
+     * @return $this
+     * @throws UnknownWebsiteException
      */
     public function setWebsite($website)
     {
