@@ -26,6 +26,7 @@ class Request
      * @param int $tries
      *
      * @return \GuzzleHttp\Psr7\Response
+     * @throws ClientException|ServerException|LimitCallException|\Exception
      */
     public function call($method, $url, $options = [], $tries = 1)
     {
@@ -38,7 +39,7 @@ class Request
     protected function send($method, $url, $options, $shouldRetry) {
         try {
             return $this->http->request($method, $url, $options);
-        } catch (ClientException $e) {
+        } catch (ClientException $e) {  // this throw when get 4xx server error.
             $response = $e->getResponse();
 
             $statusCode = $response->getStatusCode();
@@ -52,11 +53,9 @@ class Request
             } else {
                 throw $e;
             }
-        } catch (ServerException $e) {
-            if (!$shouldRetry) {
-                throw new LimitCallException;
-            }
-        } catch (Exception $e) {
+        } catch (ServerException $e) {  // this throw when get 5xx server error.
+            throw $e;
+        } catch (Exception $e) { // this throw when our code issue or guzzle bug.
             throw $e;
         }
     }
