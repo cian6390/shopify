@@ -1,6 +1,6 @@
 <?php
 
-namespace Milon\Barcode\Facades;
+namespace Cian\Shopify;
 
 use Cian\Shopify\ShopifyMacro;
 use Illuminate\Support\Facades\Facade;

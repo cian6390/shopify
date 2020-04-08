@@ -41,7 +41,7 @@
             ],
             "aliases": {
                 "Shopify": "Cian\\Shopify\\ShopifyFacade",
-                "ShopifyFacade": "Cian\\Shopify\\ShopifyMacroFacade"
+                "ShopifyMacro": "Cian\\Shopify\\ShopifyMacroFacade"
             }
         }
     }
