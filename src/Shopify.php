@@ -281,4 +281,42 @@ class Shopify extends ShopifyService
     {
         return $this->request('PUT', "draft_orders/{$draftOrderId}/complete.json", $options);
     }
+
+    /**
+     * Retrieves a list of all order risks for an order.
+     *
+     * @param $orderId
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function listOrderRisks($orderId)
+    {
+        return $this->request('GET', "orders/{$orderId}/risks.json");
+    }
+
+    /**
+     * Creates a refund.
+     *
+     * @param $orderId
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function createOrderRefund($orderId, array $options)
+    {
+        return $this->request('POST', "orders/{$orderId}/refunds.json", $options);
+    }
+
+    /**
+     * Retrieves a list of transactions.
+     *
+     * @param $orderId
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function listOrderTransactions($orderId, array $options = [])
+    {
+        return $this->request('GET', "orders/{$orderId}/transactions.json", $options);
+    }
 }
