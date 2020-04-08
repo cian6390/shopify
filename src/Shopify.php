@@ -8,8 +8,8 @@ class Shopify extends ShopifyService
 {
     /**
      * Retrieves a specific order.
-     * 
-     * @return \Cian\Shopify\Response
+     *
+     * @return Response
      */
     public function getOrder($orderId, array $options = [])
     {
@@ -18,8 +18,8 @@ class Shopify extends ShopifyService
 
     /**
      * Retrieves a list of orders.
-     * 
-     * @return \Cian\Shopify\Response
+     *
+     * @return Response
      */
     public function listOrders(array $options = [])
     {
@@ -28,8 +28,8 @@ class Shopify extends ShopifyService
 
     /**
      * Retrieves an order count.
-     * 
-     * @return \Cian\Shopify\Response
+     *
+     * @return Response
      */
     public function countOrder(array $options = [])
     {
@@ -39,7 +39,7 @@ class Shopify extends ShopifyService
     /**
      * Closes an order
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function closeOrder($orderId)
     {
@@ -49,7 +49,7 @@ class Shopify extends ShopifyService
     /**
      * Re-opens a closed order
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function openOrder($orderId)
     {
@@ -58,8 +58,8 @@ class Shopify extends ShopifyService
 
     /**
      * Cancels an order. Orders that have a fulfillment object can't be canceled.
-     * 
-     * @return \Cian\Shopify\Response
+     *
+     * @return Response
      */
     public function cancelOrder($orderId)
     {
@@ -68,8 +68,8 @@ class Shopify extends ShopifyService
 
     /**
      * Creates an order.
-     * 
-     * @return \Cian\Shopify\Response
+     *
+     * @return Response
      */
     public function createOrder(array $order)
     {
@@ -77,7 +77,7 @@ class Shopify extends ShopifyService
     }
 
     /**
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function updateOrder($orderId, array $order = [])
     {
@@ -85,7 +85,7 @@ class Shopify extends ShopifyService
     }
 
     /**
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function deleteOrder($orderId)
     {
@@ -95,7 +95,7 @@ class Shopify extends ShopifyService
     /**
      * Retrieves a list of products.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function getProducts($options = [])
     {
@@ -105,7 +105,7 @@ class Shopify extends ShopifyService
     /**
      * Retrieves a single product.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function getProduct($productId, $options = [])
     {
@@ -115,7 +115,7 @@ class Shopify extends ShopifyService
     /**
      * Creates a new product.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function createProduct(array $product)
     {
@@ -125,7 +125,7 @@ class Shopify extends ShopifyService
     /**
      * Retrieves a single product variant by ID.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function getProductVariant($variantId, $options = [])
     {
@@ -135,7 +135,7 @@ class Shopify extends ShopifyService
     /**
      * Updates an existing product variant.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function updateProductVariant($variantId, $variant = [])
     {
@@ -145,7 +145,7 @@ class Shopify extends ShopifyService
     /**
      * Retrieves fulfillments associated with an order.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function getOrderFulfillments($orderId, array $options = [])
     {
@@ -155,7 +155,7 @@ class Shopify extends ShopifyService
     /**
      * Create a fulfillment for the specified order and line items.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function createOrderFulfillment($orderId, array $fulfillment)
     {
@@ -165,7 +165,7 @@ class Shopify extends ShopifyService
     /**
      * Update information associated with a fulfillment.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function updateOrderFulfillment($orderId, $fulfillmentId, array $fulfillment)
     {
@@ -175,10 +175,110 @@ class Shopify extends ShopifyService
     /**
      * Cancel a fulfillment for a specific order ID.
      *
-     * @return \Cian\Shopify\Response
+     * @return Response
      */
     public function cancelOrderFullment($orderId, $fulfillmentId)
     {
         return $this->request('POST', "orders/$orderId/fulfillments/$fulfillmentId/cancel.json");
+    }
+
+    /**
+     * Creates a draft order.
+     *
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function createDraftOrder(array $options)
+    {
+        return $this->request('POST', "draft_orders.json", $options);
+    }
+
+    /**
+     * Updates a draft order.
+     *
+     * @param $draftOrderId
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function updateDraftOrder($draftOrderId, array $options)
+    {
+        return $this->request('PUT', "draft_orders/{$draftOrderId}.json", $options);
+    }
+
+    /**
+     * Retrieves a list of draft orders.
+     *
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function listDraftOrder(array $options = [])
+    {
+        return $this->request('GET', "draft_orders.json", $options);
+    }
+
+    /**
+     * Retrieves a specific draft order
+     *
+     * @param $draftOrderId
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function getDraftOrder($draftOrderId, array $options = [])
+    {
+        return $this->request('GET', "draft_orders/{$draftOrderId}.json", $options);
+    }
+
+    /**
+     * Retrieves a count of draft orders.
+     *
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function countDraftOrder(array $options = [])
+    {
+        return $this->request('GET', "draft_orders/count.json", $options);
+    }
+
+    /**
+     * Sends an invoice for the draft order.
+     *
+     * @param $draftOrderId
+     * @param $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function createDraftOrderInvoice($draftOrderId, $options)
+    {
+        return $this->request('POST', "draft_orders/{$draftOrderId}/send_invoice.json", $options);
+    }
+
+    /**
+     * Deletes a draft order
+     *
+     * @param $draftOrderId
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function deleteDraftOrder($draftOrderId)
+    {
+        return $this->request('DELETE', "draft_orders/{$draftOrderId}.json");
+    }
+
+    /**
+     * Completes a draft order.
+     *
+     * @param $draftOrderId
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function completeDraftOrder($draftOrderId, array $options = [])
+    {
+        return $this->request('PUT', "draft_orders/{$draftOrderId}/complete.json", $options);
     }
 }
