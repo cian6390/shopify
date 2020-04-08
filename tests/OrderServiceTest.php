@@ -2,7 +2,6 @@
 
 namespace Cian\Shopify\Tests;
 
-use Cian\Shopify\Shopify;
 use GuzzleHttp\Psr7\Response;
 use Cian\Shopify\Tests\TestCase;
 
@@ -13,7 +12,7 @@ class OrderServiceTest extends TestCase
         $website = 'tw';
         $config = $this->getConfig($website);
         $orderId = '3345678';
-        
+
         $expectMethod = 'GET';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}.json";
 
@@ -107,7 +106,6 @@ class OrderServiceTest extends TestCase
         $response = $shopify->setWebsite('tw')->countOrder();
 
         $this->assertEquals($response->getBody(), $fakeResponseBody);
-
     }
 
     public function test_close_api()
@@ -115,7 +113,7 @@ class OrderServiceTest extends TestCase
         $website = 'tw';
         $config = $this->getConfig($website);
         $orderId = '3345678';
-        
+
         $expectMethod = 'POST';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/close.json";
 
@@ -145,7 +143,7 @@ class OrderServiceTest extends TestCase
         $website = 'tw';
         $config = $this->getConfig($website);
         $orderId = '3345678';
-        
+
         $expectMethod = 'POST';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/open.json";
 
@@ -179,7 +177,7 @@ class OrderServiceTest extends TestCase
         $website = 'tw';
         $config = $this->getConfig($website);
         $orderId = '3345678';
-        
+
         $expectMethod = 'POST';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/cancel.json";
 
@@ -219,7 +217,7 @@ class OrderServiceTest extends TestCase
                 'quantity' => 1
             ]
         ];
-        $order =  [
+        $order = [
             'line_items' => $lineitems
         ];
 

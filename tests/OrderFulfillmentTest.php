@@ -2,7 +2,6 @@
 
 namespace Cian\Shopify\Tests;
 
-use Cian\Shopify\Shopify;
 use GuzzleHttp\Psr7\Response;
 use Cian\Shopify\Tests\TestCase;
 
@@ -13,7 +12,7 @@ class OrderFulfillmentTest extends TestCase
         $website = 'tw';
         $config = $this->getConfig($website);
         $orderId = '3345678';
-        
+
         $expectMethod = 'GET';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/fulfillments.json";
 

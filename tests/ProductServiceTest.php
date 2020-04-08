@@ -12,7 +12,7 @@ class ProductServiceTest extends TestCase
         $website = 'tw';
 
         $config = $this->getConfig($website);
-        
+
         $expectMethod = 'POST';
 
         $product = [
@@ -45,7 +45,7 @@ class ProductServiceTest extends TestCase
         $website = 'tw';
 
         $config = $this->getConfig($website);
-        
+
         $expectMethod = 'GET';
 
         $productId = 'aabbccd';
@@ -76,7 +76,7 @@ class ProductServiceTest extends TestCase
         $website = 'tw';
 
         $config = $this->getConfig($website);
-        
+
         $expectMethod = 'GET';
 
         $expectURL = "https://{$config['url']}/admin/api/2020-01/products.json";

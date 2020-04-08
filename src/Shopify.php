@@ -191,7 +191,7 @@ class Shopify extends ShopifyService
      */
     public function createDraftOrder(array $options)
     {
-        return $this->request('POST', "draft_orders.json", $options);
+        return $this->request('POST', 'draft_orders.json', $options);
     }
 
     /**
@@ -216,7 +216,7 @@ class Shopify extends ShopifyService
      */
     public function listDraftOrder(array $options = [])
     {
-        return $this->request('GET', "draft_orders.json", $options);
+        return $this->request('GET', 'draft_orders.json', $options);
     }
 
     /**
@@ -241,7 +241,7 @@ class Shopify extends ShopifyService
      */
     public function countDraftOrder(array $options = [])
     {
-        return $this->request('GET', "draft_orders/count.json", $options);
+        return $this->request('GET', 'draft_orders/count.json', $options);
     }
 
     /**
@@ -280,5 +280,88 @@ class Shopify extends ShopifyService
     public function completeDraftOrder($draftOrderId, array $options = [])
     {
         return $this->request('PUT', "draft_orders/{$draftOrderId}/complete.json", $options);
+    }
+
+    /**
+     * Retrieves a list of customers.
+     *
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function getCustomers(array $options = [])
+    {
+        return $this->request('GET', 'customers.json', $options);
+    }
+
+    /**
+     * Retrieves a single customer.
+     *
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function getCustomer($customerId)
+    {
+        return $this->request('GET', "customers/{$customerId}.json");
+    }
+
+    /**
+     * Searches for customers that match a supplied query.
+     *
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function searchCustomers(array $options)
+    {
+        return $this->request('GET', 'customers/search.json', $options);
+    }
+
+    /**
+     * Creates a customer.
+     *
+     * @param array $customer shopify customer aggregate.
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function createCustomer(array $customer)
+    {
+        return $this->request('POST', 'customers.json', ['customer' => $customer]);
+    }
+
+    /**
+     * Updates a customer.
+     *
+     * @param int $customerId
+     * @param array $customer shopify customer aggregate.
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function updateCustomer($customerId, array $customer)
+    {
+        return $this->request('PUT', "customers/{$customerId}.json", ['customer' => $customer]);
+    }
+
+    /**
+     * Retrieves a list of inventory levels.
+     * 
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function getInventoryLevels(array $options = [])
+    {
+        return $this->request('GET', 'inventory_levels.json', $options);
+    }
+
+    /**
+     * Retrieves a list of locations.
+     * 
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function getLocations()
+    {
+        return $this->request('GET', 'locations.json');
     }
 }

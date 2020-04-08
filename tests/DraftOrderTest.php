@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Cian\Shopify\Tests;
-
 
 use GuzzleHttp\Psr7\Response;
 
@@ -107,8 +105,8 @@ class DraftOrderTest extends TestCase
         $response = $shopify->setWebsite('tw')->countDraftOrder();
 
         $this->assertEquals($response->getBody(), $fakeResponseBody);
-
     }
+
     public function test_close_api()
     {
         $website = 'tw';
@@ -312,5 +310,4 @@ class DraftOrderTest extends TestCase
 
         $shopify->setWebsite('tw')->createDraftOrderInvoice($draftOrderId, $data);
     }
-
 }

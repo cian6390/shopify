@@ -2,12 +2,12 @@
 
 namespace Cian\Shopify\Tests;
 
+use Cian\Shopify\Shopify;
 use Cian\Shopify\Request;
 use Cian\Shopify\Tests\TestCase;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use GuzzleHttp\Exception\ClientException;
-use Cian\Shopify\Shopify;
 use Cian\Shopify\Exceptions\LimitCallException;
 
 class RequestTest extends TestCase

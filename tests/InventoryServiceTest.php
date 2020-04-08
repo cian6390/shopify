@@ -5,19 +5,40 @@ namespace Cian\Shopify\Tests;
 use GuzzleHttp\Psr7\Response;
 use Cian\Shopify\Tests\TestCase;
 
-class ProductVariantServiceTest extends TestCase
+class InventoryServiceTest extends TestCase
 {
-    public function test_get_product_variant_api()
+    public function test_get_inventory_levels_api()
     {
         $website = 'tw';
-
         $config = $this->getConfig($website);
-
+        
         $expectMethod = 'GET';
+        $expectURL = "https://{$config['url']}/admin/api/2020-01/inventory_levels.json";
 
-        $variantId = '123';
+        $expectOptions = [
+            'auth' => [$config['credential']['key'], $config['credential']['password']],
+            'query' => ['foo' => 'bar']
+        ];
 
-        $expectURL = "https://{$config['url']}/admin/api/2020-01/variants/{$variantId}.json";
+        $mock = $this->getMockClient();
+
+        $mock->shouldReceive('request')
+            ->once()
+            ->with($expectMethod, $expectURL, $expectOptions)
+            ->andReturn(new Response(200, [], json_encode([])));
+
+        $shopify = $this->getShopify($mock);
+
+        $shopify->setWebsite('tw')->getInventoryLevels(['foo' => 'bar']);
+    }
+
+    public function test_get_locations_api()
+    {
+        $website = 'tw';
+        $config = $this->getConfig($website);
+        
+        $expectMethod = 'GET';
+        $expectURL = "https://{$config['url']}/admin/api/2020-01/locations.json";
 
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
@@ -33,44 +54,6 @@ class ProductVariantServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->getProductVariant($variantId);
-
-        $this->assertEquals($response->getBody(), []);
-    }
-
-    public function test_update_product_variant_api()
-    {
-        $website = 'tw';
-
-        $config = $this->getConfig($website);
-
-        $expectMethod = 'PUT';
-
-        $varianId = 'aabbccd';
-
-        $expectURL = "https://{$config['url']}/admin/api/2020-01/variants/$varianId.json";
-
-        $expectVariants = ['foo' => 'bar'];
-
-        $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => [
-                'variant' => $expectVariants
-            ]
-        ];
-
-        $mock = $this->getMockClient();
-
-        $mock->shouldReceive('request')
-            ->once()
-            ->with($expectMethod, $expectURL, $expectOptions)
-            ->andReturn(new Response(200, [], json_encode([])));
-
-        $shopify = $this->getShopify($mock);
-
-        $response = $shopify->setWebsite('tw')
-            ->updateProductVariant($varianId, $expectVariants);
-
-        $this->assertEquals($response->getBody(), []);
+        $shopify->setWebsite('tw')->getLocations();
     }
 }
