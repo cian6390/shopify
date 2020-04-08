@@ -2,10 +2,10 @@
 
 namespace Milon\Barcode\Facades;
 
-use Cian\Shopify\Shopify;
+use Cian\Shopify\ShopifyMacro;
 use Illuminate\Support\Facades\Facade;
 
-class ShopifyFacade extends Facade {
+class ShopifyMacroFacade extends Facade {
 
     /**
      * Get the registered name of the component.
@@ -13,6 +13,6 @@ class ShopifyFacade extends Facade {
      * @return string
      */
     protected static function getFacadeAccessor() {
-        return Shopify::class;
+        return ShopifyMacro::class;
     }
 }

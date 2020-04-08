@@ -116,14 +116,16 @@ $guzzleResponse = $response->getOriginalResponse();
 ### ShopifyMacro
 
 That say you want get data easily and you don't care performance.  
-For example, you want get all result of a specific customers search, You don't want handle pagination.  
+For example, you want get all result of *getOrders* API, You don't want handle pagination.  
 Then you can use this class. 🍻🍻🍻  
 
 > Note: You may get memory issue when getting too large data.
 
-### searchCustomers
-```php
+#### Example
 
+We are using dependency injection of demonstration below, but facade is also available.
+
+```php
 namespace App\Services;
 
 use Cian\Shopify\ShopifyMacro;
@@ -146,7 +148,7 @@ class MyService
         ];
 
         // You will get response body instead of \Cian\Shopify\Response instance.
-        $orders = $this->shopifyMacro->getOrders($options)
+        $orders = $this->shopifyMacro->setWebsite('mystore')->getOrders($options)
 
         // do something with orders ...
     }

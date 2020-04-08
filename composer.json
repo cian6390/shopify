@@ -40,7 +40,8 @@
                 "Cian\\Shopify\\ShopifyServiceProvider"
             ],
             "aliases": {
-                "Shopify": "Cian\\Shopify\\ShopifyFacade"
+                "Shopify": "Cian\\Shopify\\ShopifyFacade",
+                "ShopifyFacade": "Cian\\Shopify\\ShopifyMacroFacade"
             }
         }
     }

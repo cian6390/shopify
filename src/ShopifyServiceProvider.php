@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client;
 use Cian\Shopify\Shopify;
+use Cian\Shopify\ShopifyMacro;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
@@ -18,10 +19,12 @@ class ShopifyServiceProvider extends ServiceProvider implements DeferrableProvid
             __DIR__ . '/../config/shopify.php',
             'shopify'
         );
+    
+        $this->app->bind(Shopify::class, $this->getShopifyInstance);
 
-        foreach ($this->provides() as $abstract) {
-            $this->app->bind($abstract, $this->getInstance);
-        }
+        $this->app->bind(ShopifyMacro::class, function () {
+            return new ShopifyMacro($this->getShopifyInstance());
+        });
     }
 
     /**
@@ -43,7 +46,7 @@ class ShopifyServiceProvider extends ServiceProvider implements DeferrableProvid
      */
     public function provides()
     {
-        return [Shopify::class, 'shopify'];
+        return [Shopify::class, ShopifyMacro::class];
     }
 
     /**
@@ -51,7 +54,7 @@ class ShopifyServiceProvider extends ServiceProvider implements DeferrableProvid
      *
      * @return \Cian\Shopify\Shopify
      */
-    public function getInstance()
+    public function getShopifyInstance()
     {
         $config = config('shopify');
         $client = app(Client::class);
