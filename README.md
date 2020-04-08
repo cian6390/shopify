@@ -114,3 +114,39 @@ $response->getBody(true, 512, 0);
  */
 $guzzleResponse = $response->getOriginalResponse();
 ```
+
+### ShopifyMacro
+
+That say you want get data easily and you don't care performance.  
+For example, you want get all result of a specific customers search, You don't want handle pagination.  
+Then you can use this class. 🍻🍻🍻  
+
+### searchCustomers
+```php
+
+namespace App\Services;
+
+use Cian\Shopify\ShopifyMacro;
+
+class MyService
+{
+    protected $shopifyMacro;
+
+    public function __construct(ShopifyMacro $shopifyMacro)
+    {
+        $this->shopifyMacro = $shopifyMacro;
+    }
+
+    public function exec()
+    {
+        $options = [
+            // search options ...
+        ];
+
+        // You will just get result instead of \Cian\Shopify\Response instance.
+        $customers = $this->shopifyMacro->searchCustomers($options)
+
+        // do something with customers ...
+    }
+}
+```
