@@ -62,6 +62,12 @@ class ShopifyServiceProvider extends ServiceProvider implements DeferrableProvid
     {
         $config = config('shopify');
         $client = app(Client::class);
-        return new Shopify($client, $config);
+        $shopify = new Shopify($client, $config);
+
+        if (count($config['websites']) === 1) {
+            $shopify->setWebsite($config['websites'][0]);
+        }
+
+        return $shopify;
     }
 }

@@ -1,12 +1,12 @@
 # Shopify
-
-⚠️⚠️⚠️ **This Package not complete yet, don't use it now.** ⚠️⚠️⚠️
-
-Simple Shopify API package for PHP、Laravel。
-
-- PHP 7.0+
+## Status: Alpha.
+Simple Shopify API package for PHP、Laravel。  
 
 ## Installation
+### Requirements
+
+- PHP 7.0+
+- Laravel ^5|^6|^7
 
 ```
 composer require cian/shopify
@@ -31,7 +31,7 @@ If your laravel version `<= 5.4`, don't forget to add a service provider and ali
     "aliases" => [
         // other aliases ...
         'Shopify' => \Cian\Shopify\ShopifyFacade::class,
-        'ShopifyMacro' => \Cian\Shopify\ShopifyMacro::class
+        'ShopifyMacro' => \Cian\Shopify\ShopifyMacroFacade::class
     ]
 ]
 ```
@@ -63,9 +63,9 @@ class GetShopifyOrdersService
         $response = $this->shopify
             ->setWebsite('mystore')
             ->getOrders([
-            'limit' => 100,
-            // more options of get orders api ...
-        ]);
+                'limit' => 100,
+                // more options of get orders api ...
+            ]);
 
         // always get response body using this way.
         $orders = $response->getBody();
@@ -101,7 +101,7 @@ $response->isLastPage(); // boolean
 
 /**
  * This method get content from guzzle response.
- * and run json_decode brefore return.
+ * and run json_decode before return.
  * you can pass json_decode options via this method,
  * here just show you the default values, all options are optional!
  */
@@ -144,7 +144,7 @@ class MyService
     {
         $options = [
             'limit' => 250, // get 250 records per request.
-            'created_at_min' => '2020-04-08' // set min date
+            'created_at_min' => '2020-04-08T12:00:00+00:00' // set min date
             // other getOrders options ..
         ];
 

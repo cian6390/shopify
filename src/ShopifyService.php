@@ -41,9 +41,14 @@ abstract class ShopifyService
 
         $this->config = $config;
 
-        $this->setVersion($config['defaults']['api_version']);
+        $this->setDefaults($config['defaults']);
+    }
 
-        $this->setRetries($config['defaults']['api_retries']);
+    protected function setDefaults(array $defaults)
+    {
+        $this->setVersion($defaults['api_version']);
+
+        $this->setRetries($defaults['api_retries']);
     }
 
     /**
