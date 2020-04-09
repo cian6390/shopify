@@ -65,7 +65,8 @@ class ShopifyServiceProvider extends ServiceProvider implements DeferrableProvid
         $shopify = new Shopify($client, $config);
 
         if (count($config['websites']) === 1) {
-            $shopify->setWebsite($config['websites'][0]);
+            $firstWebsite = array_keys($config['websites'])[0];
+            $shopify->setWebsite($firstWebsite);
         }
 
         return $shopify;
