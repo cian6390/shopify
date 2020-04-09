@@ -1,5 +1,5 @@
 # Shopify
-## Status: Alpha.
+
 Simple Shopify API package for PHP、Laravel。  
 
 ## Installation
