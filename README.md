@@ -30,7 +30,8 @@ If your laravel version `<= 5.4`, don't forget to add a service provider and ali
 
     "aliases" => [
         // other aliases ...
-        'Shopify' => \Cian\Shopify\ShopifyFacade::class
+        'Shopify' => \Cian\Shopify\ShopifyFacade::class,
+        'ShopifyMacro' => \Cian\Shopify\ShopifyMacro::class
     ]
 ]
 ```
@@ -59,12 +60,12 @@ class GetShopifyOrdersService
 
     public function exec()
     {
-        $options = [
+        $response = $this->shopify
+            ->setWebsite('mystore')
+            ->getOrders([
             'limit' => 100,
-            // more options of order list api ...
-        ];
-
-        $response = $this->shopify->getOrders($options);
+            // more options of get orders api ...
+        ]);
 
         // always get response body using this way.
         $orders = $response->getBody();
@@ -88,7 +89,7 @@ namespace App;
 // use laravel facade.
 use Shopify;
 
-$response = Shopify::getOrders();
+$response = Shopify::setWebsite('mystore')->getOrders([/** options */]);
 
 $response->hasNextPage(); // boolean
 $response->getNextLink(); // null or next page api url string.
@@ -148,7 +149,9 @@ class MyService
         ];
 
         // You will get response body instead of \Cian\Shopify\Response instance.
-        $orders = $this->shopifyMacro->setWebsite('mystore')->getOrders($options)
+        $orders = $this->shopifyMacro
+            ->setWebsite('mystore')
+            ->getOrders($options);
 
         // do something with orders ...
     }
