@@ -7,6 +7,36 @@ use Cian\Shopify\Tests\TestCase;
 
 class OrderServiceTest extends TestCase
 {
+    public function test_auto_merge_fields_of_get_orders_api()
+    {
+        $config = $this->getConfig();
+        $config['apis'] = [
+            'getOrders' => [
+                'fields' => ['foo', 'bar']
+            ]
+        ];
+        $expectMethod = 'GET';
+
+        $expectURL = "https://{$config['websites']['tw']['url']}/admin/api/2020-01/orders.json";
+
+        $expectOptions = [
+            'auth' => [$config['websites']['tw']['credential']['key'], $config['websites']['tw']['credential']['password']],
+            'query' => [
+                'fields' => 'foo,bar'
+            ]
+        ];
+
+        $mock = $this->getMockClient();
+
+        $mock->shouldReceive('request')
+            ->once()
+            ->with($expectMethod, $expectURL, $expectOptions)
+            ->andReturn(new Response(200, [], json_encode([])));
+
+        $shopify = $this->getShopify($mock, $config);
+
+        $shopify->setWebsite('tw')->getOrders();
+    }
     public function test_get_api()
     {
         $website = 'tw';

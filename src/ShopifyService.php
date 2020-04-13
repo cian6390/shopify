@@ -149,10 +149,35 @@ abstract class ShopifyService
         return $options;
     }
 
+    /**
+     * merge api config fields into $options
+     * 
+     * @param array $options
+     * 
+     * @return array
+     */
+    protected function mergeAPIFields($api, array $options = [])
+    {
+        if (isset($this->config['apis']) && isset($this->config['apis'][$api])) {
+            $fields = $this->config['apis'][$api]['fields'];
+            if (!empty($fields)) {
+                $options['fields'] = implode(',', $fields);
+            }
+        }
+
+        return $options;
+    }
+
     public function request($method, $source, $data = [])
     {
         if (is_null($this->website)) {
             throw new UnsetWebsiteException;
+        }
+
+        $caller = debug_backtrace()[1]['function'];
+
+        if (Str::startsWith($caller, 'get')) {
+            $data = $this->mergeAPIFields($caller, $data);
         }
 
         $options = $this->getRequestOptions();
