@@ -52,12 +52,17 @@ return [
     | from API, we can use this to reduce http size.
     | However Shopify API has a known issue which is it may give us cached(expired) data.
     | Shopify CS told us we can use fields parameter to force get fresh data.
-    | So, If you need you can set fields here, it will be apply on each request.
-    | Or keep fields as empty array, it's won't effect anything.
+    | So, You can set fields here, it will be apply on each request if is enabled.
+    |
+    | `enable` property effect each request apply fields or not.
+    | You can set it to false as default and enable it in your code.
+    | 
+    | Note: when you provide fields property manually, this config will be ignore.
     |
     */
     'apis' => [
         'getOrder' => [
+            'enable' => true,
             'fields' => [
                 // 'app_id',
                 'billing_address',

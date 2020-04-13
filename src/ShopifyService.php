@@ -35,6 +35,11 @@ abstract class ShopifyService
      */
     protected $retries;
 
+    /**
+     * @var bool $autoFields
+     */
+    protected $autoFields;
+
     public function __construct($http, $config)
     {
         $this->http = $http;
@@ -91,6 +96,13 @@ abstract class ShopifyService
         }
 
         $this->website = $website;
+
+        return $this;
+    }
+
+    public function setAutoFields(bool $enable)
+    {
+        $this->autoFields = $enable;
 
         return $this;
     }
@@ -159,9 +171,12 @@ abstract class ShopifyService
     protected function mergeAPIFields($api, array $options = [])
     {
         if (isset($this->config['apis']) && isset($this->config['apis'][$api])) {
-            $fields = $this->config['apis'][$api]['fields'];
-            if (!empty($fields)) {
-                $options['fields'] = implode(',', $fields);
+            $apiConfig = $this->config['apis'][$api];
+            if (isset($apiConfig['enable']) && $apiConfig['enable']) {
+                $fields = isset($apiConfig['fields']) ? $apiConfig['fields'] : [];
+                if (!empty($fields)) {
+                    $options['fields'] = implode(',', $fields);
+                }
             }
         }
 
@@ -176,7 +191,9 @@ abstract class ShopifyService
 
         $caller = debug_backtrace()[1]['function'];
 
-        if (Str::startsWith($caller, 'get')) {
+        $canAutoFields = !isset($data['fields']);
+
+        if ($canAutoFields) {
             $data = $this->mergeAPIFields($caller, $data);
         }
 

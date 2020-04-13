@@ -12,6 +12,7 @@ class OrderServiceTest extends TestCase
         $config = $this->getConfig();
         $config['apis'] = [
             'getOrders' => [
+                'enable' => true,
                 'fields' => ['foo', 'bar']
             ]
         ];
