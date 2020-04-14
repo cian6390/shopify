@@ -36,9 +36,9 @@ abstract class ShopifyService
     protected $retries;
 
     /**
-     * @var bool $autoFields
+     * @var array $apiPreset
      */
-    protected $autoFields;
+    protected $apiPreset = null;
 
     public function __construct($http, $config)
     {
@@ -96,13 +96,6 @@ abstract class ShopifyService
         }
 
         $this->website = $website;
-
-        return $this;
-    }
-
-    public function setAutoFields(bool $enable)
-    {
-        $this->autoFields = $enable;
 
         return $this;
     }
@@ -168,19 +161,19 @@ abstract class ShopifyService
      * 
      * @return array
      */
-    protected function mergeAPIFields($api, array $options = [])
+    public function setApiPreset(string $preset, $keep = false)
     {
-        if (isset($this->config['apis']) && isset($this->config['apis'][$api])) {
-            $apiConfig = $this->config['apis'][$api];
-            if (isset($apiConfig['enable']) && $apiConfig['enable']) {
-                $fields = isset($apiConfig['fields']) ? $apiConfig['fields'] : [];
-                if (!empty($fields)) {
-                    $options['fields'] = implode(',', $fields);
-                }
-            }
-        }
+        $this->apiPreset = [
+            'keep' => $keep,
+            'config' => $this->config['api_presets'][$preset]
+        ];
 
-        return $options;
+        return $this;
+    }
+
+    public function hasAPIPreset()
+    {
+        return !is_null($this->apiPreset);
     }
 
     public function request($method, $source, $data = [])
@@ -189,12 +182,10 @@ abstract class ShopifyService
             throw new UnsetWebsiteException;
         }
 
-        $caller = debug_backtrace()[1]['function'];
+        $hasPreset = $this->hasAPIPreset();
 
-        $canAutoFields = !isset($data['fields']);
-
-        if ($canAutoFields) {
-            $data = $this->mergeAPIFields($caller, $data);
+        if ($hasPreset) {
+            $data = array_merge($this->apiPreset['config'], $data);
         }
 
         $options = $this->getRequestOptions();
@@ -216,6 +207,10 @@ abstract class ShopifyService
             : $this->makeURL($source);
 
         $response = $request->call($method, $url, $options, $this->retries);
+
+        if ($hasPreset && !$this->apiPreset['keep']) {
+            $this->apiPreset = null;
+        }
 
         return new Response($response);
     }

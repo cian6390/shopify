@@ -2,42 +2,51 @@
 
 namespace Cian\Shopify\Tests;
 
+use Mockery;
 use GuzzleHttp\Psr7\Response;
 use Cian\Shopify\Tests\TestCase;
 
 class OrderServiceTest extends TestCase
 {
-    public function test_auto_merge_fields_of_get_orders_api()
+    public function test_it_can_merge_preset_and_respect_context_options()
     {
-        $config = $this->getConfig();
-        $config['apis'] = [
-            'getOrders' => [
-                'enable' => true,
-                'fields' => ['foo', 'bar']
+        $config = array_merge($this->getConfig(), [
+            'api_presets' => [
+                'foo' => [
+                    'limit' => 10,
+                    'fields' => 'id,address'
+                ]
             ]
-        ];
-        $expectMethod = 'GET';
-
-        $expectURL = "https://{$config['websites']['tw']['url']}/admin/api/2020-01/orders.json";
-
-        $expectOptions = [
-            'auth' => [$config['websites']['tw']['credential']['key'], $config['websites']['tw']['credential']['password']],
-            'query' => [
-                'fields' => 'foo,bar'
-            ]
-        ];
+        ]);
 
         $mock = $this->getMockClient();
-
-        $mock->shouldReceive('request')
-            ->once()
-            ->with($expectMethod, $expectURL, $expectOptions)
-            ->andReturn(new Response(200, [], json_encode([])));
-
         $shopify = $this->getShopify($mock, $config);
 
-        $shopify->setWebsite('tw')->getOrders();
+        // 第一次呼叫，預期 preset 被套用, 而且當使用者提供相同屬性時，preset 的會被覆蓋。
+        $mock->shouldReceive('request')
+            ->once()
+            ->with(Mockery::any(), Mockery::any(), Mockery::on(function ($data) {
+                return $data['query'] == [
+                    'limit' => 10,
+                    'fields' => 'foo,bar'
+                ];
+            }))
+            ->andReturn(new Response(200, [], json_encode([])));
+
+        $shopify->setWebsite('tw')->setApiPreset('foo')->getOrders(['fields' => 'foo,bar']);
+
+        // 第二次呼叫，預期 Preste 不再被套用
+        $mock->shouldReceive('request')
+            ->once()
+            ->with(Mockery::any(), Mockery::any(), Mockery::on(function ($data) {
+                return $data['query'] == [
+                    'fields' => 'foo,bar'
+                ];
+            }))
+            ->andReturn(new Response(200, [], json_encode([])));
+        $shopify->setWebsite('tw')->getOrders(['fields' => 'foo,bar']);
     }
+
     public function test_get_api()
     {
         $website = 'tw';

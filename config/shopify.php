@@ -44,26 +44,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Configure APIs 
+    | Configure API presets.
     |--------------------------------------------------------------------------
     |
-    | `fields` property.
-    | Shopify document told us that we can use fields to control what we get
-    | from API, we can use this to reduce http size.
-    | However Shopify API has a known issue which is it may give us cached(expired) data.
-    | Shopify CS told us we can use fields parameter to force get fresh data.
-    | So, You can set fields here, it will be apply on each request if is enabled.
-    |
-    | `enable` property effect each request apply fields or not.
-    | You can set it to false as default and enable it in your code.
-    | 
-    | Note: when you provide fields property manually, this config will be ignore.
+    | use shopify setApiPreset() tp apply.
     |
     */
-    'apis' => [
-        'getOrder' => [
-            'enable' => true,
-            'fields' => [
+
+    'api_presets' => [
+        'common_order_fields' => [
+            'fields' => implode(',', [
                 // 'app_id',
                 'billing_address',
                 // 'browser_ip',
@@ -123,7 +113,7 @@ return [
                 'updated_at',
                 'user_id',
                 'order_status_url'
-            ]
+            ])
         ],
     ]
 ];

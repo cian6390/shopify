@@ -114,6 +114,60 @@ $response->getBody(true, 512, 0);
 $guzzleResponse = $response->getOriginalResponse();
 ```
 
+## Configuration
+
+### api_presets
+
+We can provide some general stuff for specific api here.  
+
+For Example:  
+Your app only care the id, line_items, billing_address of order.  
+Then you can make a preset like below:
+
+```php
+// config/shopify.php
+
+return [
+    // othere properties...
+    'api_presets' => [
+        // the key(my_order_common) can be any string, just don't duplicate.
+        'my_order_common' => [
+            'fields' => [
+                'id',
+                'line_items',
+                'billing_address'
+            ]
+        ]
+    ]
+];
+```
+
+In your code
+
+```php
+<?php
+
+namespace App;
+
+use Cian\Cian\Shopify;
+
+$shopify = new Shopify($guzzleClient, $config);
+
+$keep = false;  // keep using this preset for each call or not, default is false.
+
+$response = $shopify
+    ->setWebsite('mystore')
+    ->setApiPreset('my_order_common', $keep)
+    ->getOrders([/** more options */]);
+```
+
+When your app call `setApiPreset` and provide options to api at same time,  
+They will be merged, your context options will be respect.  
+
+You may not know Shopify API has a known issue which is it may give us cached(expired) data.  
+Shopify CS told us we can use `fields` parameter to force get fresh data.  
+This feature is also useful for this issue. 🤘
+
 ### ShopifyMacro
 
 That say you want get data easily and you don't care performance.  
