@@ -6,9 +6,8 @@ use GuzzleHttp\Client;
 use Cian\Shopify\Shopify;
 use Cian\Shopify\ShopifyMacro;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Support\DeferrableProvider;
 
-class ShopifyServiceProvider extends ServiceProvider implements DeferrableProvider
+class ShopifyServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -41,16 +40,6 @@ class ShopifyServiceProvider extends ServiceProvider implements DeferrableProvid
         $this->publishes([
             __DIR__ . '/../config/shopify.php' => config_path('shopify.php'),
         ], 'config');
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [Shopify::class, ShopifyMacro::class];
     }
 
     /**

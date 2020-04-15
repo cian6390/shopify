@@ -57,6 +57,16 @@ abstract class ShopifyService
     }
 
     /**
+     * Get current instance.
+     * 
+     * @return $this
+     */
+    public function instance()
+    {
+        return $this;
+    }
+
+    /**
      * Set shopify api version.
      *
      * @param string $version
