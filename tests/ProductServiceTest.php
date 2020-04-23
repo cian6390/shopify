@@ -21,9 +21,10 @@ class ProductServiceTest extends TestCase
 
         $expectURL = "https://{$config['url']}/admin/api/2020-01/products.json";
 
+        $payload = ['product' => $product];
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => ['product' => $product]
+            'json' => $payload
         ];
 
         $mock = $this->getMockClient();
@@ -35,7 +36,7 @@ class ProductServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->createProduct($product);
+        $response = $shopify->setWebsite('tw')->createProduct($payload);
 
         $this->assertEquals($response->getBody(), []);
     }

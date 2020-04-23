@@ -46,9 +46,10 @@ class OrderFulfillmentTest extends TestCase
 
         $fulfillment = ['foo' => 'bar'];
 
+        $payload = ['fulfillment' => $fulfillment];
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => ['fulfillment' => $fulfillment]
+            'json' => $payload
         ];
 
         $mock = $this->getMockClient();
@@ -60,7 +61,7 @@ class OrderFulfillmentTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $shopify->setWebsite('tw')->createOrderFulfillment(1, $fulfillment);
+        $shopify->setWebsite('tw')->createOrderFulfillment(1, $payload);
     }
 
     public function test_update_order_fulfillment_api()
@@ -89,7 +90,7 @@ class OrderFulfillmentTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $shopify->setWebsite('tw')->updateOrderFulfillment(1, 2, $fulfillment);
+        $shopify->setWebsite('tw')->updateOrderFulfillment(1, 2, ['fulfillment' => $fulfillment]);
     }
 
     public function test_cancel_order_fulfillment_api()

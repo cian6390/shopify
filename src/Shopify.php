@@ -71,17 +71,17 @@ class Shopify extends ShopifyService
      *
      * @return Response
      */
-    public function createOrder(array $order)
+    public function createOrder(array $options)
     {
-        return $this->request('POST', 'orders.json', ['order' => $order]);
+        return $this->request('POST', 'orders.json', $options);
     }
 
     /**
      * @return Response
      */
-    public function updateOrder($orderId, array $order = [])
+    public function updateOrder($orderId, array $options = [])
     {
-        return $this->request('PUT', "orders/{$orderId}.json", ['order' => $order]);
+        return $this->request('PUT', "orders/{$orderId}.json", $options);
     }
 
     /**
@@ -113,13 +113,23 @@ class Shopify extends ShopifyService
     }
 
     /**
+     * Retrieves a list of product variants.
+     *
+     * @return Response
+     */
+    public function getProductVariants($productId, $options = [])
+    {
+        return $this->request('GET', "products/$productId/variants.json", $options);
+    }
+
+    /**
      * Creates a new product.
      *
      * @return Response
      */
-    public function createProduct(array $product)
+    public function createProduct(array $options)
     {
-        return $this->request('POST', 'products.json', ['product' => $product]);
+        return $this->request('POST', 'products.json', $options);
     }
 
     /**
@@ -137,9 +147,9 @@ class Shopify extends ShopifyService
      *
      * @return Response
      */
-    public function updateProductVariant($variantId, $variant = [])
+    public function updateProductVariant($variantId, $options = [])
     {
-        return $this->request('PUT', "variants/$variantId.json", ['variant' => $variant]);
+        return $this->request('PUT', "variants/$variantId.json", $options);
     }
 
     /**
@@ -157,9 +167,9 @@ class Shopify extends ShopifyService
      *
      * @return Response
      */
-    public function createOrderFulfillment($orderId, array $fulfillment)
+    public function createOrderFulfillment($orderId, array $options)
     {
-        return $this->request('POST', "orders/$orderId/fulfillments.json", ['fulfillment' => $fulfillment]);
+        return $this->request('POST', "orders/$orderId/fulfillments.json", $options);
     }
 
     /**
@@ -167,9 +177,9 @@ class Shopify extends ShopifyService
      *
      * @return Response
      */
-    public function updateOrderFulfillment($orderId, $fulfillmentId, array $fulfillment)
+    public function updateOrderFulfillment($orderId, $fulfillmentId, array $options)
     {
-        return $this->request('PUT', "orders/$orderId/fulfillments/$fulfillmentId.json", ['fulfillment' => $fulfillment]);
+        return $this->request('PUT', "orders/$orderId/fulfillments/$fulfillmentId.json", $options);
     }
 
     /**
@@ -320,26 +330,26 @@ class Shopify extends ShopifyService
     /**
      * Creates a customer.
      *
-     * @param array $customer shopify customer aggregate.
+     * @param array $options
      * @return Response
      * @throws Exceptions\UnsetWebsiteException
      */
-    public function createCustomer(array $customer)
+    public function createCustomer(array $options)
     {
-        return $this->request('POST', 'customers.json', ['customer' => $customer]);
+        return $this->request('POST', 'customers.json', $options);
     }
 
     /**
      * Updates a customer.
      *
      * @param int $customerId
-     * @param array $customer shopify customer aggregate.
+     * @param array $options.
      * @return Response
      * @throws Exceptions\UnsetWebsiteException
      */
-    public function updateCustomer($customerId, array $customer)
+    public function updateCustomer($customerId, array $options)
     {
-        return $this->request('PUT', "customers/{$customerId}.json", ['customer' => $customer]);
+        return $this->request('PUT', "customers/{$customerId}.json", $options);
     }
 
     /**

@@ -51,11 +51,10 @@ class ProductVariantServiceTest extends TestCase
 
         $expectVariants = ['foo' => 'bar'];
 
+        $payload = ['variant' => $expectVariants];
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => [
-                'variant' => $expectVariants
-            ]
+            'json' => $payload
         ];
 
         $mock = $this->getMockClient();
@@ -68,7 +67,7 @@ class ProductVariantServiceTest extends TestCase
         $shopify = $this->getShopify($mock);
 
         $response = $shopify->setWebsite('tw')
-            ->updateProductVariant($varianId, $expectVariants);
+            ->updateProductVariant($varianId, $payload);
 
         $this->assertEquals($response->getBody(), []);
     }

@@ -259,9 +259,10 @@ class OrderServiceTest extends TestCase
         $expectMethod = 'POST';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders.json";
 
+        $payload = ['order' => $order];
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => ['order' => $order]
+            'json' => $payload
         ];
 
         $fakeRespons = [
@@ -279,7 +280,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->createOrder($order);
+        $response = $shopify->setWebsite('tw')->createOrder($payload);
 
         $this->assertEquals($response->getBody(), $fakeRespons);
     }
@@ -299,9 +300,10 @@ class OrderServiceTest extends TestCase
             ]
         ];
 
+        $payload = ['order' => $data];
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => ['order' => $data]
+            'json' => $payload
         ];
 
         $fakeRespons = [
@@ -319,7 +321,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->updateOrder($orderId, $data);
+        $response = $shopify->setWebsite('tw')->updateOrder($orderId, $payload);
 
         $this->assertEquals($response->getBody(), $fakeRespons);
     }

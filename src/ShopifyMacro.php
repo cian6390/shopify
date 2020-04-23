@@ -59,11 +59,36 @@ class ShopifyMacro
         return $this->collectResults('getOrders', 'orders', $options);
     }
 
-    protected function collectResults($API, $key, $options)
+    public function getProducts(array $options = [])
+    {
+        return $this->collectResults('getProducts', 'products', $options);
+    }
+
+    public function getProductVariants($productId, $options = [])
+    {
+        return $this->collectResults('getProductVariant', 'variants', $productId, $options);
+    }
+
+    public function getOrderFulfillments($orderId, array $options = [])
+    {
+        return $this->collectResults('getOrderFulfillments', 'fulfillments', $orderId, $options);
+    }
+
+    protected function collectResults()
     {
         $results = [];
 
-        $response = $this->shopify->$API($options);
+        $args = func_get_args();
+
+        $argsCount = func_num_args();
+
+        $API = $args[0];
+
+        $key = $args[1];
+
+        $options = array_slice($args, 2, $argsCount - 2);
+
+        $response = $this->shopify->$API(...$options);
 
         $body = $response->getBody();
 

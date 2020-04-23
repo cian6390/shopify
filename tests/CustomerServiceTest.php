@@ -91,9 +91,10 @@ class CustomerServiceTest extends TestCase
         $expectMethod = 'POST';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/customers.json";
 
+        $payload = ['customer' => ['foo' => 'bar']];
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => ['customer' => ['foo' => 'bar']]
+            'json' => $payload
         ];
 
         $mock = $this->getMockClient();
@@ -105,7 +106,7 @@ class CustomerServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $shopify->setWebsite('tw')->createCustomer(['foo' => 'bar']);
+        $shopify->setWebsite('tw')->createCustomer($payload);
     }
 
     public function test_update_customer_api()
@@ -117,9 +118,10 @@ class CustomerServiceTest extends TestCase
         $expectMethod = 'PUT';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/customers/{$expectId}.json";
 
+        $payload = ['customer' => ['foo' => 'bar']];
         $expectOptions = [
             'auth' => [$config['credential']['key'], $config['credential']['password']],
-            'json' => ['customer' => ['foo' => 'bar']]
+            'json' => $payload
         ];
 
         $mock = $this->getMockClient();
@@ -131,6 +133,6 @@ class CustomerServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $shopify->setWebsite('tw')->updateCustomer($expectId, ['foo' => 'bar']);
+        $shopify->setWebsite('tw')->updateCustomer($expectId, $payload);
     }
 }
