@@ -59,6 +59,11 @@ class ShopifyMacro
         return $this->collectResults('getOrders', 'orders', $options);
     }
 
+    public function getCustomers(array $options = [])
+    {
+        return $this->collectResults('getCustomers', 'customers', $options);
+    }
+
     public function getProducts(array $options = [])
     {
         return $this->collectResults('getProducts', 'products', $options);
