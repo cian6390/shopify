@@ -9,9 +9,21 @@ class ShopifyMacro
 {
     protected $shopify;
 
+    /**
+     * @var callable|null $formatter
+     */
+    protected $formatter = null;
+
     public function __construct(Shopify $shopify)
     {
         $this->shopify = $shopify;
+    }
+
+    public function setFormatter(callable $formatter = null)
+    {
+        $this->formatter = $formatter;
+
+        return $this;
     }
 
     /**
@@ -101,12 +113,18 @@ class ShopifyMacro
 
         $link = $response->getNextLink();
 
+        $useFormatter = !is_null($this->formatter);
+
         while ($link) {
             $response = $this->shopify->request('GET', $link);
 
-            $link = $response->getNextLink();
+            $items = $response->getBody()[$key];
 
-            $results = array_merge($results, $response->getBody()[$key]);
+            foreach($items as $item) {
+                $results[] = $useFormatter ? $this->formatter($item) : $item;
+            }
+
+            $link = $response->getNextLink();
         }
 
         return $results;
