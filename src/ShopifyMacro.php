@@ -2,6 +2,7 @@
 
 namespace Cian\Shopify;
 
+use Closure;
 use Cian\Shopify\Shopify;
 use Cian\Shopify\Exceptions\UnknownWebsiteException;
 
@@ -10,7 +11,7 @@ class ShopifyMacro
     protected $shopify;
 
     /**
-     * @var callable|null $formatter
+     * @var Closure|null $formatter
      */
     protected $formatter = null;
 
@@ -19,9 +20,14 @@ class ShopifyMacro
         $this->shopify = $shopify;
     }
 
-    public function setFormatter(callable $formatter = null)
+    /**
+     * @param \Closure $formatter
+     * 
+     * @return $this
+     */
+    public function setFormatter($formatter = null)
     {
-        $this->formatter = $formatter;
+        $this->formatter = Closure::bind($formatter, null);
 
         return $this;
     }
@@ -119,10 +125,11 @@ class ShopifyMacro
             $items = $response->getBody()[$key];
 
             foreach ($items as $item) {
-                $results[] = $useFormatter ? $this->formatter($item) : $item;
+                $results[] = $useFormatter ? ($this->formatter)($item) : $item;
             }
 
             $nextLink = $response->getNextLink();
+
         } while ($nextLink);
 
         return $results;
