@@ -105,27 +105,25 @@ class ShopifyMacro
 
         $options = array_slice($args, 2, $argsCount - 2);
 
-        $response = $this->shopify->$API(...$options);
-
-        $body = $response->getBody();
-
-        $results = array_merge($results, $body[$key]);
-
-        $link = $response->getNextLink();
-
         $useFormatter = !is_null($this->formatter);
 
-        while ($link) {
-            $response = $this->shopify->request('GET', $link);
+        $nextLink = null;
+
+        do {
+            if ($nextLink) {
+                $response = $this->shopify->request('GET', $nextLink);
+            } else {
+                $response = $this->shopify->$API(...$options);
+            }
 
             $items = $response->getBody()[$key];
 
-            foreach($items as $item) {
+            foreach ($items as $item) {
                 $results[] = $useFormatter ? $this->formatter($item) : $item;
             }
 
-            $link = $response->getNextLink();
-        }
+            $nextLink = $response->getNextLink();
+        } while ($nextLink);
 
         return $results;
     }
