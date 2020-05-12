@@ -205,6 +205,16 @@ class MyService
         // You will get response body instead of \Cian\Shopify\Response instance.
         $orders = $this->shopifyMacro
             ->setWebsite('mystore')
+            /**
+             * setFormatter is optional!
+             * it can let getters return specific format.
+             * this may decline some memory usage.
+             */
+            ->setFormatter(function ($order) {
+                return [
+                    'id' => $order['id']
+                ];
+            })
             ->getOrders($options);
 
         // do something with orders ...
