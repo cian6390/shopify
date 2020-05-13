@@ -114,6 +114,12 @@ $response->getBody(true, 512, 0);
 $guzzleResponse = $response->getOriginalResponse();
 ```
 
+### Laravel Middleware
+
+Add `\Cian\Shopify\Http\Middleware\VerifyWebHookMiddleware.php` to middleware list, just like others.  
+Please make sure your `.env` file contains **SHOPIFY_MYSTORE_SECRET** field.  
+If you have many store, just make sure each website has `secret` in your `config/shopify.php`.
+
 ## Configuration
 
 ### api_presets

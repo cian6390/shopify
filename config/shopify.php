@@ -35,6 +35,7 @@ return [
     'websites' => [
         'mystore' => [
             'url' => env('SHOPIFY_MYSTORE_URL'),
+            'secret' => env('SHOPIFY_MYSTORE_SECRET'),
             'credential' => [
                 'key' => env('SHOPIFY_MYSTORE_API_KEY'),
                 'password' => env('SHOPIFY_MYSTORE_API_PASSWORD')
