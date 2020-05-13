@@ -61,9 +61,9 @@ class Shopify extends ShopifyService
      *
      * @return Response
      */
-    public function cancelOrder($orderId)
+    public function cancelOrder($orderId, $options = [])
     {
-        return $this->request('POST', "orders/{$orderId}/cancel.json");
+        return $this->request('POST', "orders/{$orderId}/cancel.json", $options);
     }
 
     /**

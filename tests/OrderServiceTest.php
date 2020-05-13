@@ -217,8 +217,10 @@ class OrderServiceTest extends TestCase
         $expectMethod = 'POST';
         $expectURL = "https://{$config['url']}/admin/api/2020-01/orders/{$orderId}/cancel.json";
 
+        $payload = ['foo' => []];
         $expectOptions = [
-            'auth' => [$config['credential']['key'], $config['credential']['password']]
+            'auth' => [$config['credential']['key'], $config['credential']['password']],
+            'json' => $payload
         ];
 
         $fakeRespons = [
@@ -236,7 +238,7 @@ class OrderServiceTest extends TestCase
 
         $shopify = $this->getShopify($mock);
 
-        $response = $shopify->setWebsite('tw')->cancelOrder($orderId);
+        $response = $shopify->setWebsite('tw')->cancelOrder($orderId, $payload);
 
         $this->assertEquals($response->getBody(), $fakeRespons);
     }
