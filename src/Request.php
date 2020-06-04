@@ -28,15 +28,31 @@ class Request
      * @return \GuzzleHttp\Psr7\Response
      * @throws ClientException|ServerException|LimitCallException|\Exception
      */
-    public function call($method, $url, $options = [], $tries = 1)
+    public function call($method, $url, $options = [], $tries = 1, $delay = 1)
     {
-        for ($i = 1; $i <= $tries; $i++) {
-            $shouldRetry = $tries - $i > 0;
-            return $this->send($method, $url, $options, $shouldRetry);
-        }
+        $tried = 0;
+
+        do {
+            $response = $this->send($method, $url, $options);
+
+            if (!is_null($response)) {
+                return $response;
+            }
+
+            $tried += 1;
+
+            if ($tried >= $tries) {
+                throw new LimitCallException;
+            } else {
+                $shouldRetry = true;
+
+                sleep($delay);
+            }
+
+        } while ($shouldRetry);
     }
 
-    protected function send($method, $url, $options, $shouldRetry) {
+    protected function send($method, $url, $options) {
         try {
             return $this->http->request($method, $url, $options);
         } catch (ClientException $e) {  // this throw when get 4xx server error.
@@ -44,14 +60,13 @@ class Request
 
             $statusCode = $response->getStatusCode();
 
-            if ($statusCode === 429) {
-                if ($shouldRetry) {
-                    sleep(1);
-                } else {
-                    throw new LimitCallException;
-                }
-            } else {
+            // 除了 429 的例外，一率交給應用層處理
+            // 429 代表 Shopify 正在限制我們的請求頻率，使用回傳 null 來表示。
+            // 外層可以根據是不是 null 來決定要不要重試
+            if ($statusCode !== 429) {
                 throw $e;
+            } else {
+                return null;
             }
         } catch (ServerException $e) {  // this throw when get 5xx server error.
             throw $e;

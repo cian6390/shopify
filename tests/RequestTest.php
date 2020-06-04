@@ -26,13 +26,13 @@ class RequestTest extends TestCase
         );
 
         $mockClient->shouldReceive('request')
-            ->times(1)
+            ->times(3)
             ->with('GET', 'https://example.com', [])
             ->andThrow($exception);
 
         $request = new Request($mockClient);
 
-        $request->call('GET', 'https://example.com', [], 1);
+        $request->call('GET', 'https://example.com', [], 3, 0);
     }
 
     public function makeShopify()
