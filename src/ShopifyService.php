@@ -208,13 +208,13 @@ abstract class ShopifyService
             ? $source
             : $this->makeURL($source);
 
-        $badResponseException = null;
-
         try {
             $response = $request->call($method, $url, $options, $this->retries);
         } catch (Exception $e) {
             if ($e instanceof BadResponseException) {
-                $badResponseException = $e;
+                $response = $e->getResponse();
+            } else {
+                throw $e;
             }
         }
 
@@ -222,6 +222,6 @@ abstract class ShopifyService
             $this->apiPreset = null;
         }
 
-        return new Response($response, $badResponseException);
+        return new Response($response);
     }
 }
