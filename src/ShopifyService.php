@@ -2,11 +2,13 @@
 
 namespace Cian\Shopify;
 
+use Exception;
 use Cian\Shopify\Request;
 use Cian\Shopify\Response;
 use Illuminate\Support\Str;
 use Cian\Shopify\Exceptions\UnsetWebsiteException;
 use Cian\Shopify\Exceptions\UnknownWebsiteException;
+use GuzzleHttp\Exception\BadResponseException;
 
 abstract class ShopifyService
 {
@@ -156,9 +158,9 @@ abstract class ShopifyService
 
     /**
      * merge api config fields into $options
-     * 
+     *
      * @param array $options
-     * 
+     *
      * @return array
      */
     public function setApiPreset(string $preset, $keep = false)
@@ -206,12 +208,20 @@ abstract class ShopifyService
             ? $source
             : $this->makeURL($source);
 
-        $response = $request->call($method, $url, $options, $this->retries);
+        $badResponseException = null;
+
+        try {
+            $response = $request->call($method, $url, $options, $this->retries);
+        } catch (Exception $e) {
+            if ($e instanceof BadResponseException) {
+                $badResponseException = $e;
+            }
+        }
 
         if ($hasPreset && !$this->apiPreset['keep']) {
             $this->apiPreset = null;
         }
 
-        return new Response($response);
+        return new Response($response, $badResponseException);
     }
 }

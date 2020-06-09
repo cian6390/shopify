@@ -4,6 +4,7 @@ namespace Cian\Shopify;
 
 use Exception;
 use Cian\Shopify\Exceptions\LimitCallException;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
@@ -63,7 +64,8 @@ class Request
             // 除了 429 的例外，一率交給應用層處理
             // 429 代表 Shopify 正在限制我們的請求頻率，使用回傳 null 來表示。
             // 外層可以根據是不是 null 來決定要不要重試
-            if ($statusCode !== 429) {
+            $retryStatusCode = 429;
+            if ($statusCode !== $retryStatusCode) {
                 throw $e;
             } else {
                 return null;

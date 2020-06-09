@@ -29,8 +29,14 @@ class Response
         'previous' => '/<(.*)>; rel="previous"/'
     ];
 
-    public function __construct($response)
+    public function __construct($response, $badResponseException = null)
     {
+        $isBadResponse = !is_null($badResponseException);
+
+        if ($isBadResponse) {
+            $response = $badResponseException->getResponse();
+        }
+
         $this->response = $response;
         
         $this->handleHeaders();
