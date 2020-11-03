@@ -23,7 +23,7 @@ class ShopifyMacro
     /**
      * @param \Closure $formatter
      * 
-     * @return $this
+     * @return this
      */
     public function setFormatter($formatter = null)
     {
@@ -36,7 +36,7 @@ class ShopifyMacro
      * Set shopify api version.
      *
      * @param string $version
-     * @return $this
+     * @return this
      */
     public function setVersion($version)
     {
@@ -49,7 +49,7 @@ class ShopifyMacro
      * Set target website.
      *
      * @param $website
-     * @return $this
+     * @return this
      * @throws UnknownWebsiteException
      */
     public function setWebsite($website)
@@ -63,7 +63,7 @@ class ShopifyMacro
      * Set default retry times of request.
      *
      * @param int $retries
-     * @return $this
+     * @return this
      */
     public function setRetries(int $retries)
     {

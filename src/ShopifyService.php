@@ -62,7 +62,7 @@ abstract class ShopifyService
      * Set shopify api version.
      *
      * @param string $version
-     * @return $this
+     * @return this
      */
     public function setVersion($version)
     {
@@ -75,7 +75,7 @@ abstract class ShopifyService
      * Set default retry times of request.
      *
      * @param int $retries
-     * @return $this
+     * @return this
      */
     public function setRetries(int $retries)
     {
@@ -88,7 +88,7 @@ abstract class ShopifyService
      * Set target website.
      *
      * @param $website
-     * @return $this
+     * @return this
      * @throws UnknownWebsiteException
      */
     public function setWebsite($website)
