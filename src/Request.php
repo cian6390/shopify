@@ -43,7 +43,7 @@ class Request
             $tried += 1;
 
             if ($tried >= $tries) {
-                throw new LimitCallException;
+                throw new LimitCallException($response);
             } else {
                 $shouldRetry = true;
 
