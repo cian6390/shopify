@@ -124,8 +124,10 @@ class ShopifyMacro
 
             $items = $response->getBody()[$key];
 
-            foreach ($items as $item) {
-                $results[] = $useFormatter ? ($this->formatter)($item) : $item;
+            if (!empty($items)) {
+                foreach ($items as $item) {
+                    $results[] = $useFormatter ? ($this->formatter)($item) : $item;
+                }
             }
 
             $nextLink = $response->getNextLink();
