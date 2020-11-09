@@ -6,7 +6,7 @@ Simple Shopify API package for PHP、Laravel。
 ### Requirements
 
 - PHP 7.0+
-- Laravel ^5|^6|^7
+- Laravel ^5|^6|^7|^8
 
 ```
 composer require cian/shopify
