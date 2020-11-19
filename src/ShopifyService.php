@@ -161,7 +161,7 @@ abstract class ShopifyService
      *
      * @param array $options
      *
-     * @return array
+     * @return this
      */
     public function setApiPreset(string $preset, $keep = false)
     {
@@ -173,6 +173,9 @@ abstract class ShopifyService
         return $this;
     }
 
+    /**
+     * @return boolean
+     */
     public function hasAPIPreset()
     {
         return !is_null($this->apiPreset);
