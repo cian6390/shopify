@@ -13,7 +13,7 @@ return [
     */
 
     'defaults' => [
-        'api_version' => '2020-01',
+        'api_version' => '2020-10',
         'api_retries' => 3
     ],
 
