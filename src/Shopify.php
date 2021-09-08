@@ -401,6 +401,19 @@ class Shopify extends ShopifyService
     }
 
     /**
+     * Calculate a refund.
+     *
+     * @param $orderId
+     * @param array $options
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function calculateOrderRefund($orderId, array $options)
+    {
+        return $this->request('POST', "orders/{$orderId}/refunds/calculate.json", $options);
+    }
+
+    /**
      * Retrieves a list of transactions.
      *
      * @param $orderId
