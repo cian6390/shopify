@@ -7,6 +7,66 @@ use Cian\Shopify\ShopifyService;
 class Shopify extends ShopifyService
 {
     /**
+     * Create a new Webhook.
+     *
+     * @return Response
+     */
+    public function createWebhook(array $options = [])
+    {
+        return $this->request('POST', 'webhooks.json', $options);
+    }
+
+    /**
+     * Retrieves a list of webhooks.
+     *
+     * @return Response
+     */
+    public function getWebhooks(array $options = [])
+    {
+        return $this->request('GET', 'webhooks.json', $options);
+    }
+
+    /**
+     * Retrieves a single webhook.
+     *
+     * @return Response
+     */
+    public function getWebhook($webhookId, array $options = [])
+    {
+        return $this->request('GET', "webhooks/{$webhookId}.json", $options);
+    }
+
+    /**
+     * Revice a count of all Webhooks.
+     *
+     * @return Response
+     */
+    public function getWebhookCount(array $options = [])
+    {
+        return $this->request('GET', 'webhooks/count.json', $options);
+    }
+
+    /**
+     * Update an existing Webhook.
+     *
+     * @return Response
+     */
+    public function updateWebhook($webhookId, array $options = [])
+    {
+        return $this->request('PUT', "webhooks/{$webhookId}.json", $options);
+    }
+
+    /**
+     * Remove an existing Webhook.
+     *
+     * @return Response
+     */
+    public function deleteWebhook($webhookId, array $options = [])
+    {
+        return $this->request('DELETE', "webhooks/{$webhookId}.json", $options);
+    }
+
+    /**
      * Retrieves a specific order.
      *
      * @return Response
@@ -354,7 +414,7 @@ class Shopify extends ShopifyService
 
     /**
      * Retrieves a list of inventory levels.
-     * 
+     *
      * @param array $options
      * @return Response
      * @throws Exceptions\UnsetWebsiteException
@@ -366,7 +426,7 @@ class Shopify extends ShopifyService
 
     /**
      * Retrieves a list of locations.
-     * 
+     *
      * @return Response
      * @throws Exceptions\UnsetWebsiteException
      */
