@@ -376,6 +376,28 @@ class Shopify extends ShopifyService
     }
 
     /**
+     * Retrieves a single customer.
+     *
+     * @return Response
+     * @throws Exceptions\UnsetWebsiteException
+     */
+    public function searchMetafields($params = [])
+    {
+        $querystring = '';
+
+        if (!empty($params)) {
+            $items = [];
+            foreach ($params as $key => $value) {
+                $items[] = "metafield[{$key}]={$value}";
+            }
+
+            $querystring = '?' . implode('&', $items);
+        }
+
+        return $this->request('GET', 'metafields.json' . $querystring);
+    }
+
+    /**
      * Searches for customers that match a supplied query.
      *
      * @param array $options
